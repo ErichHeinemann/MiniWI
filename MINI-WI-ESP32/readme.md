@@ -8,7 +8,7 @@ As I had already bad experience with the ADC of the ESP, I tried to use a ADS115
 I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Joysticks because I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around.
 
 Basically, I am a guitar-player and not a flute or sax-player. In school, we all had to learn to play the recorder and so, I tried to change the fingering to be the same like for a recorder.
-I moved one touch-sensor to the back, used 2 sensors for the left hadn pinky and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand.
+I moved one touch-sensor to the back, used 2 sensors for the left hand pinky and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand. ( currently no function implemented for RH6, probably it will get a "Function"-Button for Transpose or Switching Settings )
 
 For the body of the Mini-WI I used this material:
 - an old inner cardboard role/pipe r=3.1cm by 40cm , 
