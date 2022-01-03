@@ -64,3 +64,7 @@ Added tested and working version of the new TeensieWI, a simplified version for 
 2017-10-31
 
 Improved the joystick version of the TeensieWI, now called T.WI, with breath response curves and some other stuff that can be configured at plug-in. Started making these for sale on Tindie. https://www.tindie.com/products/yoe/twi-a-teensy-based-usb-midi-woodwind-controller/
+
+2022-01-03 E.Heinemann
+#MINI WI ESP32
+I am trying to build this Wind-Instrument but I changed the MCU from Aarduino to ESP32, still using a MPR121, MIDI via Blutooth, ADS115 as diffrential ADC for DP53-Pressuresensor
