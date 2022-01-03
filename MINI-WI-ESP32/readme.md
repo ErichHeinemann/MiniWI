@@ -5,16 +5,19 @@ While COVID and the "Chip-Missing" - Pandemic, I bought 2 (bad or worse) DP53DP 
 
 As I had already bad experience with the ADC of the ESP, I tried to use a ADS115 and would add a MPU6050 later in the sketch.
 
-basically, I am a guitar-player and not a flute or sax-player. In school, we all had to learn to play the recorder and so, I tried to change the fingering to be the same like for a recorder.
-I moved one sensor to the back, used 2 sensors for the left and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand.
+I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Yousticks becauwse I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around.
+
+Basically, I am a guitar-player and not a flute or sax-player. In school, we all had to learn to play the recorder and so, I tried to change the fingering to be the same like for a recorder.
+I moved one touch-sensor to the back, used 2 sensors for the left hadn pinky and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand.
 
 For the body of the Mini-WI I used this material:
 - an old inner cardboard role/pipe r=3.1cm by 40cm , 
-- pimped up with adhesive film ( one in gold and one in orange )
+- pimped it up with adhesive film ( one in gold and one in orange )
 - thinnest brass-tube (1m) from the hardwarestore ( around 3mm diameter )
 - Silicon-Tube ( 50cm ) ( aquarium accessories )
-- Brass (looking) upholstery nails from hardwarestore
+- 12 cheap brass (looking) upholstery nails from hardwarestore ( 1cm diameter )
 - thin isolated wire
+- some sticky tape to manage the wires
 
 I added a OpenSCAD-File which I used to create different 3D-printed parts like rings for the:
 - fingerholes, - finally not used
