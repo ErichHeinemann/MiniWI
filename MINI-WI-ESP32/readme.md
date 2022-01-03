@@ -5,7 +5,7 @@ While COVID and the "Chip-Missing" - Pandemic, I bought 2 (bad or worse) DP53DP 
 
 As I had already bad experience with the ADC of the ESP, I tried to use a ADS115 and would add a MPU6050 later in the sketch.
 
-I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Yousticks becauwse I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around.
+I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Joysticks because I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around.
 
 Basically, I am a guitar-player and not a flute or sax-player. In school, we all had to learn to play the recorder and so, I tried to change the fingering to be the same like for a recorder.
 I moved one touch-sensor to the back, used 2 sensors for the left hadn pinky and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand.
