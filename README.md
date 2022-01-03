@@ -1,4 +1,4 @@
-# MiniWI
+# MiniWI Fork with ESP32 and BLE ( Midi over Bluetooth )
 MIDI woodwind controller
 
 2016-04-17
