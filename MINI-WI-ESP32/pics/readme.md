@@ -1,1 +1,0 @@
-Pictures while building it
