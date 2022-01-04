@@ -1,11 +1,9 @@
-// At the end, there are a lot of disabled statements to print the needed pieces.
-// I prefer to design the STL for a single piece and then add them in the Slicer as often I need them
+// At the end, there are a lot of disabled statements
+// active as amany as You need
 
 // OpenSource GPL 
 
 // E.Heinemann 2022
-
-
 
 radPipe = 50; // 10cm
 radRing = 6;
@@ -13,6 +11,14 @@ radRing = 6;
 
 $fs = 0.15;
 $fn = 50;
+/*
+color ("Red") rotate([180,0,0])linear_extrude(height=2) { scale([0.1,0.1])
+import(file = "milbesos.svg", center = true, dpi = 96);
+}
+rotate([0,0,0])linear_extrude(height=5,convexity=2) { scale([0.45,0.45])
+import(file = "milbesos.svg", center = false, dpi = 96);
+}
+*/
 
 module roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "all") {
 	// If single value, convert to [x, y, z] vector
@@ -343,8 +349,9 @@ module pipesplitbox( dr=3.1, dl=20, rPipe=29.5 , secondhole=true ){
         }
 
     union(){
-          translate([dr+2,0, -dr/1.5])      cylinder( dl, dr, dr, center=true);  
-          translate([dr+2,0, +dl +dr/1.5])      cylinder( dl, dr, dr, center=true);  
+        translate([ dr+2, 0, -dr/1.5 ])     
+        cylinder( dl, dr, dr, center=true);  
+          translate([ dr+2, 0, dl + dr/1.5 ])  cylinder( dl, dr, dr, center=true);  
         
         
          if( secondhole ) {
@@ -402,10 +409,10 @@ module pipeBottom2( rPipe=29.8, wPlatine=42 , rPipeInnter=24.5){
     translate ([-11.5, -25.5 ,5.5 ])cylinder( 8, 0.8,0.8, center=true);
     translate ([-11.5, 25.5 ,5.5 ]) cylinder( 8, 0.8,0.8, center=true);
     // Platinenpfosten Dick
-    translate ([ 11.5, 25.5 ,4.5 ])  cylinder( 4, 1.5,1.5, center=true);
-    translate ([ 11.5, -25.5 ,4.5 ]) cylinder( 4, 1.5,1.5, center=true);
-    translate ([-11.5, -25.5 ,4.5 ])cylinder( 4, 1.5,1.5, center=true);
-    translate ([-11.5, 25.5 ,4.5 ]) cylinder( 4, 1.5,1.5, center=true);
+    translate ([ 11.5, 25.5 ,3.5 ])  cylinder( 6, 1.5,1.5, center=true);
+    translate ([ 11.5, -25.5 ,3.5 ]) cylinder( 6, 1.5,1.5, center=true);
+    translate ([-11.5, -25.5 ,3.5 ])cylinder( 6, 1.5,1.5, center=true);
+    translate ([-11.5, 25.5 ,3.5 ]) cylinder( 6, 1.5,1.5, center=true);
 
 
     difference(){
@@ -451,7 +458,7 @@ module pipeBottom2( rPipe=29.8, wPlatine=42 , rPipeInnter=24.5){
         }
         union(){
             // TESTCUT:
-            rotate([ 0, 0, 45 ])cube([ 50, 50, 50 ]);
+            // rotate([ 0, 0, 45 ])cube([ 50, 50, 50 ]);
             
             difference(){
                 translate([ 0, 0, 17 ]) cylinder( 14, rPipe+3, rPipe+3, center=true );
@@ -635,6 +642,9 @@ module mpxholder(   ){
         
         // Umriss des Drucksensors
         union(){
+            difference(){
+              translate([ 11, 3, 0 ]) cube([10,13,10], center=true);
+            }
              difference(){   
                translate([-6,13,7.5]) cube([ 25,25,16], center=true );
                translate([ 10,-4,7.5]) cylinder( 16,29,29, center=true );   
@@ -690,7 +700,7 @@ module loadspeakerCover( rPipe=29.8, wPlatine=42 , rPipeInner=24.5, pipelength=6
            // Schalter    
            // #translate([0,8,0]) cube([ 8,3,12], center=true );
             
-           // Drill-holes
+           // Bohrungen
             /*
            translate ([28,0,0 ])cylinder( 10, 1.2,1.2, center=true);
            translate ([0,28,0 ])cylinder( 10, 1.2,1.2, center=true);
@@ -708,7 +718,7 @@ module loadspeakerCover( rPipe=29.8, wPlatine=42 , rPipeInner=24.5, pipelength=6
 // #######
 // ####### ############################################################################################
 
-// ####### I used only pipeBottom2(), pipeTop() and mpxholder(), mouthpiece and no optional things... I hate waiting for the 3D-Prints...
+// ####### I have used only pipeBottom2(), pipeTop() and mpxholder(), mouthpiece and no optional things... I hate waiting for the 3D-Prints...
 
 
 
