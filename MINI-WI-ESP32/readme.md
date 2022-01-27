@@ -1,19 +1,20 @@
 # MINI WI ESP32
 
 I replaced the Arduino by an ESP32, still use an MPR121 via I2C ( GPIO-5 for SDA, GPIO-23 for SCL ) and an ADS1115 to get the differential pressure related voltage.
-While COVID and the "Chip-Missing" - Pandemic, I bought 2 (bad or worse) DP53DP which are Differential Pressure Mesurement Sensors which need 2 ADCs.
+While COVID and the "Chip-Missing" - Pandemic, I bought 2 (bad or worse) DP53DP which are Differential Pressure Mesurement Sensors which need 2 ADC-inputs on the ADS1115.
 
-As I had already bad experience with the ADC of the ESP, I tried to use a ADS115 and would add a MPU6050 later in the sketch.
+As I had already bad experience with the ADC of the ESP, I tried to use a ADS115 and would add a MPU6050 later in the sketch to send MIDI-CC-Messages.
 
-I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Joysticks because I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around.
+I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Joysticks in the code yet because I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around. ( update - got Joystick )
 
 Basically, I am a guitar-player and not a flute or sax-player. In school, we all had to learn to play the recorder and so, I tried to change the fingering to be the same like for a recorder.
-I moved one touch-sensor to the back, used 2 sensors for the left hand pinky and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand. ( currently no function implemented for RH6, probably it will get a "Function"-Button for Transpose or Switching Settings )
+I moved one touch-sensor to the back, used 2 sensors for the left hand pinky and 2 for the right pinky finger and one sensor (RH6) for the thumb of the right hand. 
+Currently the right-hand thumb (RH6), switches to a lower octave.
 
 For the body of the Mini-WI I used this material:
 - an old inner cardboard role/pipe r=3.1cm by 40cm , 
 - pimped it up with adhesive film ( one in gold and one in orange )
-- thinnest brass-tube (1m) from the hardwarestore ( around 3mm diameter )
+- thinnest brass-tube (1 meter ) from the hardwarestore ( around 3mm diameter )
 - Silicon-Tube ( 50cm ) ( aquarium accessories )
 - 12 cheap brass (looking) upholstery nails from hardwarestore ( 1cm diameter )
 - thin isolated wire
@@ -28,15 +29,15 @@ I added a OpenSCAD-File which I used to create different 3D-printed parts like r
 There was no need to cut the cardboard-role from top to bottom! 
 
 Step 1:
-Cut the cardboard-role to Your prefered length ( use Your hands to get a good length, hold it like a flute and find the length which looks good. )
+Cut the cardboard-role to Your prefered length ( use Your hands to get a good length and don´t forget the reserved place/area for the ESP32 and other modules, hold it like a flute and find the length which looks good. )
 
 Step 2: ( optional )
-Wrap the adhesive film around it, leaf top and bottom open
+Wrap the adhesive film around it, leave top and bottom open
 
 Step 3: 
 Find the best places for the captive sensors. Hold the pipe like You would hold it for playing it as a flute or oboe etc.
 Mark the position of Your fingers. Keep in mind, the pinkys will get 2 sensors, don´t spread Your pinky to much to reach out to the second hole.
-As the sesors are captive sensors, there has to be enough space between the fingers and sensors.
+As the sensors are captive sensors, there has to be enough space between the fingers and sensors.
 Sensors for the left pinkys should be wider, for the right-hand pinkys it should be more narrow to be able to get both with the pinky at once.
 
 Step 4:
@@ -67,7 +68,7 @@ Start with the highest Wire ( High c hole )
 Step 9:
 Print out the Bottom and later the Top to cover the Cardboard-Pipe.
 I have tried to design two versions for the bottom. 
-a) the USB faces straigt downwards ... Your have to lay down the instrument to the side
+a) the USB faces straigt downwards ... Your have to lay down the instrument to the side if You pause Your jam-session
 b) the USB faces backwards to You and You get a flat bottom, - Instrument could stand on the bottom.
 
 Step 10:
@@ -79,16 +80,17 @@ Step 11:
 Solder all modules ( depends on version of bottom ) to the Stripboards
 
 Step 12:
-Create the connection for VCC/VDD , GND, SDA and SCL between all modules.
-Connect the Wires from the brass-nails ( Touch Sensors ) from Bottom Down to the Inputs 0 to 11 of the MPR121 module.
+Create the connection for VCC/VDD 3.3Volts, GND, SDA and SCL between all modules.
+Connect the Wires from the brass-nails ( Touch Sensors ) from Bottom Down to the 12 Inputs 0 to 11 of the MPR121 module.
 
 Step 13: 
 Insert the MPX DP53DP (Pressure-Sensor ) via the silicon-tube to the Split-Box.
 solder 4 wires to the DP52DP ( V+ goes to 3.3V or 5 Volts ...  I had measured very low voltages and decided to go to 5 Volts.
 Out + / Out - have to be connected to the ADS1115 ADC0 and ADC1.
+Check the documentation for YOUR pressure-seensor as I did not find a genral pinout of theem. they are different from modell to model!
 
 Step 14:
-Measure the connections to the ESP32, - are there any shorts between SDA/SCL or +VDD and GND??
+Measure the connections to the ESP32 with a multimeter, - are there any shorts between SDA/SCL or +VDD and GND??
 Check the Connection from the Touch-Sensors to the MPR121
 
 Step 15:
@@ -104,10 +106,7 @@ Start an App on Your Smartphone which support MIDI BLE.
 Power up the Mini-WI, after the LED flashes stopps, blow into the moutpiece and press some brass-nails.
 
 Step 17:
-optimize it Your way, add Yousticks, more Touch-Sensors to the ESP32. 
-Implement a funktion when RH6 is pressed ...
+optimize it Your way, add Joysticks, more Touch-Sensors to the ESP32. 
+Implement Your funktion when RH6 is pressed or Joysticks are moved.
 
-
-
-
-
+There are a lot videos which explain how to connect a BLE - MIDI-Controller to Your Smartphone or PC.
