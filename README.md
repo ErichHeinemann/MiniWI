@@ -1,6 +1,11 @@
 # MiniWI Fork with ESP32 and BLE ( Midi over Bluetooth )
 MIDI woodwind controller
 
+
+2022-01-27 E.Heinemann Use the folder for the MINI-WI-ESP32 Version to get a wireleess version which plays via Bluetooth BLE
+Links to Youtube: https://www.youtube.com/embed/_GEmQJgfbyA
+
+
 2016-04-17
 
 This MIDI controller is running on an Arduino Pro Mini with Atmega328 16MHz/5V. It makes use of breakouts for analog pins A6 and A7, so it needs a Pro Mini version with these breakouts. The pressure sensor used for the project is the Freescale MPX5010GP. Fingering is reverse engineered from Akai EWI and note values are calculated from pressed keys. For details on this, read my guest post on the Gordophone blog. 
