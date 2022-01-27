@@ -3,6 +3,9 @@
 I replaced the Arduino by an ESP32, still use an MPR121 via I2C ( GPIO-5 for SDA, GPIO-23 for SCL ) and an ADS1115 to get the differential pressure related voltage.
 While COVID and the "Chip-Missing" - Pandemic, I bought 2 (bad or worse) DP53DP which are Differential Pressure Mesurement Sensors which need 2 ADC-inputs on the ADS1115.
 
+Video ( german ) https://www.youtube.com/watch?v=_GEmQJgfbyA
+
+
 As I had already bad experience with the ADC of the ESP, I tried to use a ADS115 and would add a MPU6050 later in the sketch to send MIDI-CC-Messages.
 
 I don´t want to support a physical MIDI-Out, - to clunky wires and I did think of an internal battery but prefer an external USB-Powerbank which I could use for dirrent purposes ... I mainly play guitar, not MINI-WI. I did not implement the Joysticks in the code yet because I wanted to use the fingering of a normal recorder and I didn´t had Joysticks laying around. ( update - got Joystick )
