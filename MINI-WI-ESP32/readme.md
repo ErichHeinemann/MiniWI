@@ -4,7 +4,7 @@ I replaced the Arduino by an ESP32, still use an MPR121 via I2C ( GPIO-5 for SDA
 While COVID and the "Chip-Missing" - Pandemic, I bought 2 (bad or worse) DP53DP which are Differential Pressure Mesurement Sensors which need 2 ADC-inputs on the ADS1115.
 
 Video ( german ) https://www.youtube.com/watch?v=_GEmQJgfbyA
-
+[![Youtube](https://github.com/ErichHeinemann/MiniWI/blob/master/MINI-WI-ESP32/mini_wi_esp32_yt.png?raw=true)](https://www.youtube.com/watch?v=_GEmQJgfbyA "Mini WI Windinstrument on Youtube (german)")
 
 As I had already bad experience with the ADC of the ESP, I tried to use a ADS115 and would add a MPU6050 later in the sketch to send MIDI-CC-Messages.
 
