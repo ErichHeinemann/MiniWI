@@ -30,7 +30,7 @@ void display_setup(){
 
   // Clear the buffer
   display.clearDisplay();
-  display_test();
+  display_calibration();
 
 }
 
@@ -49,14 +49,14 @@ char d_line5[40];
 // Breath-CC als Balken + CC-Number?
 // Current Menu
 
-void display_test(){
+void display_calibration(){
   display.clearDisplay();
 
   display.setTextSize(2);             // Normal 1:1 pixel scale
   display.setTextColor(SSD1306_WHITE);        // Draw white text
   display.setCursor(0,0);             // Start at top-left corner
   display.println(F( d_line0 ) );
-
+  display.setTextSize(1); 
   display.setCursor(0,25);             // Start at top-left corner
   display.println(F( "Calibration" ) );
 
