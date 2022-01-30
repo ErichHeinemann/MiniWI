@@ -9,11 +9,13 @@
 #include <BLEMidi.h>
 #endif
 
-#define PitchbendTouch
-// #define PitchbendAnalog
+// #define PitchbendTouch
+#define PitchbendAnalog
 
-#define ModulationGyro
-// #define ModulationAnalog
+// #define ModulationGyro
+#define ModulationAnalog
+#define ModulationPortamentoCombi
+
 
 /*
  * 
@@ -144,7 +146,7 @@ PROGRAMME FUNCTION:   Wind Controller with EWI style key setup (reduced) with op
                       Freescale MPX5010GP breath sensor, PS2 style thumb joysticks 
                       for octave selection and pb/mod control, capacitive touch keys, output to 5-pin DIN MIDI 
 
-HARDWARE NOTES:
+HARDWARE NOTES for MINI-WI (Arduino):
 * For the MIDI connection, attach a MIDI out Female 180 Degree 5-Pin DIN socket to Arduino.
 * Socket is seen from solder tags at rear.
 * DIN-5 pinout is:                                         _______ 
@@ -185,31 +187,42 @@ HARDWARE NOTES:
 * 5: n/c
 * 6: n/c
 *     
-* The cheapere Freescale MPX53DP pressure is not thee best option, because it uses 2 Pins on the ADS1115 
+*     
+* MII-WI ESP32    
+* Autor: E.Heinemann
+* Code is based on the MINI-WI - Project from JOHAN BERGLUND
+* 
+* The cheapere Freescale MPX53DP pressure is not thee best option, because it uses 2 Pins on the ADS1115, but it was the only available one 
 * 
 * 1: GND (pin with indent)
-* 2: +Vout to ADC0
+* 2: +Vout to ADC0 ADS1115 Pin A0 
 * 
 * * 3: +VSS  to 5Volts
-* 4: -Vout to ADC
+* 4: -Vout to ADC1 ADS1115 PIN A1
 * 5: n/c
 * 6: n/c
 * 
-* Midi panic on pin 11 and 12 (internal pullup, both pins low sends all notes off)
+* Midi panic is not implemented yet ... on pin 11 and 12 (internal pullup, both pins low sends all notes off)
+* GPIO 25, 26,27 are reserverd for I2S in a later version which includes a duophonee Synth-Engine
+* 
+* SDA / SCL are provided by 
 * 
 */
 
 //_______________________________________________________________________________________________ DECLARATIONS
 
-uint16_t breath_Thr = 120;     // Set threshold level before switching ON
-#define  ON_Delay   15   // Set Delay after ON threshold before velocity is checked (wait for tounging peak)
-uint16_t breath_max=140;  // Blowing as hard as you can // 5 Volt to the MPX DP53DP
+int breath_Thr = 120;    // Set threshold level before switching ON
+#define  ON_Delay   12   // Set Delay after ON threshold before velocity is checked (wait for tounging peak)
+int breath_max=135;  // Blowing as hard as you can // 5 Volt to the MPX DP53DP
 
-#define modsLo_Thr 50  // Low threshold for mod stick center
-#define modsHi_Thr 70  // High threshold for mod stick center
+uint16_t modsLo_Thr=480;  // Low threshold for mod stick center
+uint16_t modsHi_Thr=510;  // High threshold for mod stick center
 
-#define octsLo_Thr 50  // Low threshold for octave stick center
-#define octsHi_Thr 70  // High threshold for octave stick center
+uint16_t pbsLo_Thr=480;  // Low threshold for mod stick center
+uint16_t pbsHi_Thr=510;  // High threshold for mod stick center
+
+uint16_t octsLo_Thr=480;  // Low threshold for octave stick center
+uint16_t octsHi_Thr=510;  // High threshold for octave stick center
 
 /*
 #define octsLo1_Thr 409  // Low threshold for octave select pot
@@ -218,7 +231,7 @@ uint16_t breath_max=140;  // Blowing as hard as you can // 5 Volt to the MPX DP5
 #define octsHi2_Thr 818  // High threshold 2 for octave select pot
 */
 
-#define PB_sens 4095    // Pitch Bend sensitivity 0 to 8191 where 8191 is full pb range
+#define PB_sens 8191 // 4095    // Pitch Bend sensitivity 0 to 8191 where 8191 is full pb range
 
 // The three states of our state machine
 
@@ -367,12 +380,12 @@ void onDisconnectedESP32(  ){
 
 void setup() {
 
-#ifdef MIDI5Pin
+// #ifdef MIDI5Pin
 //   Serial.begin(31250);  // start serial with midi baudrate 31250
-#else
+// #else
   Serial.begin(115200);  // start serial with midi baudrate 31250
   Serial.flush();
-#endif
+// #endif
   // pinMode( MIDIRX_PIN , INPUT_PULLUP);  // GPIO16 
   // MIDISerial.begin( 31250, SERIAL_8N1, MIDIRX_PIN, MIDITX_PIN ); // midi port
   // MIDI_setup();
@@ -473,7 +486,13 @@ void setup() {
   Serial.printf("Pressure Calibration\n");
 #endif  
   pressure_calibration();
-  
+#ifdef PitchbendAnalog
+  ads1115_calibration_pitchbend();
+#endif
+#ifdef ModulationAnalog
+  ads1115_calibration_modulation();
+#endif
+
 }
 
 //
@@ -498,8 +517,11 @@ void pressure_calibration(){
     digitalWrite( LedPin, LOW );
     delay(300);
   breath_Thr += ads.readADC_Differential_0_1();
-  breath_Thr = ( breath_Thr / 4 ) + 3; // +2 or +3 check if there are too many Sounds which don´t stop
+  breath_Thr = ( breath_Thr / 4 ) + 5; // +2 or +3 check if there are too many Sounds which don´t stop
   // Display the result of the calibration
+
+
+  
 }
 //_______________________________________________________________________________________________ MAIN LOOP
 
@@ -707,12 +729,17 @@ void pitch_bend(){
   }
 #endif
 #ifdef PitchbendAnalog
-  // pitchBendAnalog = ads.readADC_SingleEnded(1) / 64;
+  // Joystick - Pitchbend Up-Down 
+  pitchBendAnalog = ads.readADC_SingleEnded( 2 );
+#ifdef DEBUGGING
+  Serial.print(" ADC2: ");
+  Serial.println( pitchBendAnalog  );
+#endif   
   // pitchBendAnalog = analogRead(A0); // read voltage on analog pin A0
-  if( pitchBendAnalog > modsHi_Thr ){
-    pitchBendAnalog = map(pitchBendAnalog,modsHi_Thr,1023,8192,(8192 + PB_sens)); // go from 8192 to 16383 (full pb up) when off center threshold going up
-  }else if( pitchBendAnalog < modsLo_Thr ){
-    pitchBendAnalog = map( pitchBendAnalog,0,modsLo_Thr,(8191 - PB_sens),8192 ); // go from 8192 to 0 (full pb dn) when off center threshold going down
+  if( pitchBendAnalog > pbsHi_Thr ){
+    pitchBendAnalog = map(pitchBendAnalog,pbsHi_Thr,1023,8192,(8192 + PB_sens)); // go from 8192 to 16383 (full pb up) when off center threshold going up
+  }else if( pitchBendAnalog < pbsLo_Thr ){
+    pitchBendAnalog = map( pitchBendAnalog,0,pbsLo_Thr,(8191 - PB_sens),8192 ); // go from 8192 to 0 (full pb dn) when off center threshold going down
   }else{
     pitchBendAnalog = 8192; // 8192 is 0 pitch bend
   }
@@ -736,8 +763,8 @@ void pitch_bend(){
 //***********************************************************
 
 void modulation(){
-  // Analog-PIN from ESP32 GPIO 34
-  // ggf in Kombination mit einem Touch-Sensor?? touchRead(4)
+  // perhaps added to a touch-Pin in Combination? touchRead(4)
+
 #ifdef ModulationGyro  
   modLevel = gyro_total_midi;
  if( modLevel > modsHi_Thr/8 ){
@@ -747,17 +774,64 @@ void modulation(){
   }
 #endif
 #ifdef ModulationAnalog  
-  modLevel = analogRead( potPinModulation )/4; // ESP32 ADC works from 0 to 4096
-  // In den modLevel sollte auch die Blasstärke einfließen!!
-  // modLevel = analogRead(A1); // read voltage on analog pin A1
-  
+  // modLevel = analogRead( potPinModulation )/4; // ESP32 ADC works from 0 to 4096
+  modLevel = ads.readADC_SingleEnded( 3 ); // Joystick on VX or VY ADC03 on ADS1115  -2 to +996, Jaystick is powered by 3.3 Volts but 120kOhm Resistor in Line
+#ifdef DEBUGGING
+  Serial.print(" ADC3: ");
+  Serial.println( modLevel  );
+#endif   
+  // modLevel = analogRead(A1); // read voltage on analog pin A1  
   if( modLevel > modsHi_Thr ){
     modLevel = map( modLevel,modsHi_Thr,1023,0,127); // go from 0 to full modulation when off center threshold going right(?)
   }else if( modLevel < modsLo_Thr ){
+#ifndef ModulationPortamentoCombi
     modLevel = map( modLevel,0,modsLo_Thr,127,0); // go from 0 to full modulation when off center threshold going left(?)
+#endif
+#ifdef ModulationPortamentoCombi
+    modLevel = 0;
+    portLevel = map( modLevel,0,modsLo_Thr,127,0); // go from 0 to full modulation when off center threshold going left(?)
+    if( portLevel != oldport ){  // only send midi data if level has changed from previous value
+#ifdef MIDI5Pin    
+      midiSend((0xB0 | MIDIchannel), 5, portLevel); 
+#endif     
+#ifdef ESP32_BLE_MIDI
+      BLEMidiServer.controlChange(  MIDIchannel, 5, portLevel );
+#endif
+#ifdef BLE_MIDI
+      MIDI.sendControlChange( 5, portLevel, MIDIchannel  );  
+#endif    
+      oldport=portLevel;
+    }
+  if( PortK != oldportk ){ // only send midi data if status has changed from previous value
+    if( PortK ){ 
+      midiSend((0xB0 | MIDIchannel), 65, 127); // send portamento on
+#ifdef ESP32_BLE_MIDI
+      BLEMidiServer.controlChange(  MIDIchannel, 65, 127 );
+#endif
+#ifdef BLE_MIDI
+      MIDI.sendControlChange( 65, 127, MIDIchannel ); 
+#endif      
+    }else{
+#ifdef MIDI5Pin      
+      midiSend((0xB0 | MIDIchannel), 65, 0); // send portamento off  
+#endif      
+#ifdef ESP32_BLE_MIDI
+    BLEMidiServer.controlChange(  MIDIchannel, 65, 0 );
+#endif
+#ifdef BLE_MIDI
+      MIDI.sendControlChange(  65, 0 , MIDIchannel );        
+#endif      
+    }
+    oldportk=PortK;
+  }
+    
+
+#endif    
   }else{
     modLevel = 0; // zero modulation in center position
   }
+  Serial.print(" ADC3: ");
+  Serial.println( modLevel  );
 #endif
   
   if( modLevel != oldmod ){  // only send midi data if modulation has changed from previous value
@@ -777,8 +851,8 @@ void modulation(){
 //***********************************************************
 
 void portamento(){
-  portLevel = ads.readADC_SingleEnded(3)/512;
-  
+ // portLevel = ads.readADC_SingleEnded(3)/512;
+  portLevel = 0;
   // portLevel = map( ads.readADC_SingleEnded(3)/128 ,0,1023,0,127);
   // portLevel = map(analogRead(A2),0,1023,0,127); // read voltage on analog pin A7 and map to midi value
   // portLevel = map( portLevel, 0, 1023, 0, 127 );
